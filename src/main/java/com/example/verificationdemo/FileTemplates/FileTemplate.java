@@ -16,12 +16,12 @@ public class FileTemplate {
 
     public static double scaleX = 1;
 
-    private static String obfuscator(String filePath) throws IOException, InterruptedException {
+    private static String obfuscator(String filePath, String url, double scale) throws IOException, InterruptedException {
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
 
         String result="";
         //TODO: node路径
-        String cmd = "/Users/bytedance/.nvm/versions/node/v14.18.1/bin/node " + path + "static/js/obfuscator.js " + filePath;
+        String cmd = "/Users/bytedance/.nvm/versions/node/v14.18.1/bin/node " + path + "static/js/obfuscator.js " + filePath + " " + url + " " + scale;
 
         Process ps = Runtime.getRuntime().exec(cmd);
 
@@ -62,18 +62,21 @@ public class FileTemplate {
     }
 
     public static void changeJsScale() throws IOException, InterruptedException {
-        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-
-        String jsFileTemplate = readToString(path + "templates/captcha.js.template");
-
         double randomScale = Math.random() * 1.5 + 0.5;
-        String url = "http://localhost:8080";
-
-        String jsFileSource = String.format(jsFileTemplate, randomScale, url);
-        writeToFile(path + "static/js/captcha.js", jsFileSource);
-
-        JsCode = obfuscator(path + "static/js/captcha.js");
         scaleX = randomScale;
+    }
+
+    public static String getJsSource() throws IOException {
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        String jsFileTemplate = readToString(path + "templates/captcha.js.template");
+        jsFileTemplate = jsFileTemplate.replace("{0}", "1");
+        jsFileTemplate = jsFileTemplate.replace("{1}", "http://localhost:8080");
+        return jsFileTemplate;
+    }
+
+    public static String getJsCode(String url, double scaleX) throws IOException, InterruptedException {
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        return obfuscator(path + "templates/captcha.js.template", url, scaleX);
     }
 
     public static String getHtmlCode(String questionImg, String answer1Img, String answer2Img, String JsCode) throws IOException {

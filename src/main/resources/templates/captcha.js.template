@@ -46,14 +46,14 @@ function sliderListener(event, selector){
     var sliderInitOffset = 0;
     var MIN_MOVE = 0;
     var MAX_MOVE = 260;
-    var scaleX = %f;
+    var scaleX = {0};
     var moveX = 0;
 
     var $slider = document.querySelector('.slider'+selector);
     var $sliderMask = document.querySelector('.sliderMask'+selector);
     var $sliderContainer = document.querySelector('.sliderContainer'+selector);
     var $answer = document.querySelector('.answerImg'+selector);
-    var imageWidth = $answer.offsetWidth * 0.6;
+    var imageWidth = $answer.offsetWidth * 0.9;
 
     $sliderContainer.classList.add("sliderContainer_active");
     sliderInitOffset = event.clientX;
@@ -129,7 +129,7 @@ function checkLocation(move, selector){
     var $sliderContainer = document.querySelector('.sliderContainer'+selector);
 
     const Http = new XMLHttpRequest();
-    const url='%s';
+    const url='{1}/checkLocation';
     Http.open("POST", url);
     Http.send(JSON.stringify({
         moveX: move,

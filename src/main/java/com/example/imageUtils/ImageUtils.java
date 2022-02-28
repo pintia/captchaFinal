@@ -88,7 +88,7 @@ public class ImageUtils {
             fy=randomLocation?(int)((Math.random()*0.3+0.6)*height):fy;//每个字符高低是否随机
             g.setColor(foreColor==null?getRandomColor():foreColor);
             g.drawString(textCode.charAt(i)+"",fx,fy);
-            fx+=(width - rightWhite) / (textCode.length() - 1) * (randomLocation ? (Math.random() * 0.2 + 0.9) : 1); //依据宽度浮动
+            fx+=(width - rightWhite) / (textCode.length()) * (randomLocation ? (Math.random() * 0.2 + 0.9) : 1); //依据宽度浮动
         }
 
         //扭曲图片

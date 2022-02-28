@@ -27,9 +27,11 @@
                     </div>
                     <div class="answerOneDiv">
                         <img class="answerImg one" src="data:image/jpg;base64,%s"/>
+                        <img class="questionImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"/>
                     </div>
                     <div class="answerTwoDiv">
                         <img class="answerImg two" src="data:image/jpg;base64,%s"/>
+                        <img class="questionImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"/>
                     </div>
                     <div class="sliderContainer one">
                         <div class="sliderBg one"></div>

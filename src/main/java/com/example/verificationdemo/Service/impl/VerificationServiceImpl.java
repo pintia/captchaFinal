@@ -75,12 +75,14 @@ public class VerificationServiceImpl implements VerificationService {
 
         double answer1Location = getAnswerLocation(answer1, answerInteger/10);
         double answer2Location = getAnswerLocation(answer2, answerInteger%10);
-        AnswerSessionMap answerSessionMap = new AnswerSessionMap(answer1Location, answer2Location, FileTemplate.scaleX);
+        double scaleX = FileTemplate.scaleX;
+        AnswerSessionMap answerSessionMap = new AnswerSessionMap(answer1Location, answer2Location, scaleX);
 
         globalCache.set(sessionId, answerSessionMap, 300);
         String url = "http://localhost:8080";
+        String JsCode = FileTemplate.getJsSource();
 
-        String htmlFile = FileTemplate.getHtmlCode(getBase64File(question), getBase64File(answer1), getBase64File(answer2), FileTemplate.JsCode);
+        String htmlFile = FileTemplate.getHtmlCode(getBase64File(question), getBase64File(answer1), getBase64File(answer2), JsCode);
         return htmlFile;
     }
 
