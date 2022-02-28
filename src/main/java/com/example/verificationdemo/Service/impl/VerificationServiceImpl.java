@@ -13,7 +13,6 @@ import sun.misc.BASE64Encoder;
 
 import javax.script.*;
 import java.io.*;
-import java.nio.charset.Charset;
 
 @Service("VerificationService")
 public class VerificationServiceImpl implements VerificationService {
@@ -64,26 +63,6 @@ public class VerificationServiceImpl implements VerificationService {
         return Integer.parseInt(operands[0]) + Integer.parseInt(operands[1]);
     }
 
-    private String obfuscator(String sourceString) throws IOException, InterruptedException {
-        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-
-        String result="";
-        String cmd = "/Users/bytedance/.nvm/versions/node/v14.18.1/bin/node " + path + "static/js/obfuscator.js " + path + "static/js/captcha.js";
-
-        Process ps = Runtime.getRuntime().exec(cmd);
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream(), Charset.forName("GBK")));
-        String line = null;
-        while ((line = br.readLine()) != null) {
-            result+=line+"\n";
-        }
-
-        br.close();
-        ps.waitFor();
-
-        return result;
-    }
-
     @Override
     public String getResources(String sessionId) throws IOException, ScriptException, NoSuchMethodException, InterruptedException {
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
@@ -94,21 +73,14 @@ public class VerificationServiceImpl implements VerificationService {
         String questionString = getFileName(question);
         int answerInteger = getQuestionAnswer(questionString);
 
-
-        String jsTemplate = FileTemplate.jsFile;
-        String htmlTemplate = FileTemplate.htmlFile;
-
-        double randomScale = Math.random() * 1.5 + 0.5;
         double answer1Location = getAnswerLocation(answer1, answerInteger/10);
         double answer2Location = getAnswerLocation(answer2, answerInteger%10);
-        AnswerSessionMap answerSessionMap = new AnswerSessionMap(answer1Location, answer2Location, randomScale);
+        AnswerSessionMap answerSessionMap = new AnswerSessionMap(answer1Location, answer2Location, FileTemplate.scaleX);
 
         globalCache.set(sessionId, answerSessionMap, 300);
         String url = "http://localhost:8080";
-        String jsFile = String.format(jsTemplate, randomScale, url);
 
-        String tempJsFile = obfuscator(jsFile);
-        String htmlFile = String.format(htmlTemplate, getBase64File(question), getBase64File(answer1), getBase64File(answer2), tempJsFile);
+        String htmlFile = FileTemplate.getHtmlCode(getBase64File(question), getBase64File(answer1), getBase64File(answer2), FileTemplate.JsCode);
         return htmlFile;
     }
 
