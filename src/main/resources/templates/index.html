@@ -6,52 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="static/js/jquery.js"></script>
     <link href="static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="static/css/captcha.css" rel="stylesheet">
-
 </head>
 
 <body>
-<button class="btn">安全验证</button>
-<div class="slider-captcha">
-    <div class="captcha-mask"></div>
-    <div class="captcha-body">
-        <div class="card">
-            <div class="card-header">
-                <span>请完成安全验证!</span>
-            </div>
-            <div class="card-body">
-                <div id="captcha">
-                    <div class="questionDiv">
-                        <img class="questionImg"/>
-                    </div>
-                    <div class="answerOneDiv">
-                        <img class="answerImg one"/>
-                    </div>
-                    <div class="answerTwoDiv">
-                        <img class="answerImg two"/>
-                    </div>
-                    <div class="sliderContainer one">
-                        <div class="sliderBg one"></div>
-                        <div class="sliderMask one">
-                            <div class="slider one">
-                                <i class="sliderIcon fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sliderContainer two">
-                        <div class="sliderBg two"></div>
-                        <div class="sliderMask two">
-                            <div class="slider two">
-                                <i class="sliderIcon fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script src="static/js/captcha.js"></script>
+    <button class="btn">安全验证</button>
+    <script>
+        var $btn = document.querySelector('.btn');
+        $btn.onmousedown = function(){
+            var href = location.href;
+            window.location.href= href + href.endsWith("/") ? "captcha" : "/captcha"
+        };
+    </script>
 </body>
 </html>

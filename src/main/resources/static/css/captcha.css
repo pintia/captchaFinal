@@ -3,7 +3,7 @@ body {
 }
 
 .slider-captcha{
-    display: none;
+    display: block;
 }
 .slider-captcha, .slider-captcha .captcha-mask{
     position: absolute;

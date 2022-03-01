@@ -5,6 +5,7 @@ import com.example.verificationdemo.FileTemplates.FileTemplate;
 import com.example.verificationdemo.Service.VerificationService;
 import com.example.verificationdemo.type.AnswerSessionMap;
 import com.example.verificationdemo.type.CheckLocationRequest;
+import com.example.verificationdemo.type.JsFileResource;
 import com.example.verificationdemo.utils.IGlobalCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,12 +76,12 @@ public class VerificationServiceImpl implements VerificationService {
 
         double answer1Location = getAnswerLocation(answer1, answerInteger/10);
         double answer2Location = getAnswerLocation(answer2, answerInteger%10);
-        double scaleX = FileTemplate.scaleX;
+        JsFileResource jsFileResource = FileTemplate.jsFileResource;
+        double scaleX = jsFileResource.getScale();
         AnswerSessionMap answerSessionMap = new AnswerSessionMap(answer1Location, answer2Location, scaleX);
 
         globalCache.set(sessionId, answerSessionMap, 300);
-        String url = "http://localhost:8080";
-        String JsCode = FileTemplate.getJsSource();
+        String JsCode = jsFileResource.getJsCode();
 
         String htmlFile = FileTemplate.getHtmlCode(getBase64File(question), getBase64File(answer1), getBase64File(answer2), JsCode);
         return htmlFile;

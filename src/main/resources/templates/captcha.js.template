@@ -1,11 +1,7 @@
 onPageReady();
 
 function onPageReady(){
-    var $btn = document.querySelector('.btn');
     var $modal = document.querySelector('.slider-captcha');
-    $btn.onmousedown = function(){
-        $modal.setAttribute("style", "display: block");
-    };
 
     ['.captcha-mask'].forEach(function(selector){
         var $el = $modal.querySelector(selector);
@@ -26,7 +22,7 @@ function onPageReady(){
 
 
     function hideModal(){
-        $modal.setAttribute("style", "display: none");
+        //$modal.setAttribute("style", "display: none");
     }
 
 };
@@ -107,8 +103,7 @@ function success(){
 }
 
 function resetAll(){
-    reset(".one");
-    reset(".two");
+    location.reload();
 }
 
 function reset(selector){

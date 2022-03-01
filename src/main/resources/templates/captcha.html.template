@@ -11,7 +11,6 @@
 </head>
 
 <body>
-<button class="btn">安全验证</button>
 <div class="slider-captcha">
     <div class="captcha-mask"></div>
     <div class="captcha-body">

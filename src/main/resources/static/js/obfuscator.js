@@ -29,7 +29,7 @@ fs.readFile(inputPath, 'utf8' , (err, data) => {
         debugProtection: false,//影响开发者工具
         debugProtectionInterval: 4000,
         disableConsoleOutput: true,//禁用console方法
-        // domainLock: ["127.0.0.1"],
+        domainLock: ["localhost"],
         numbersToExpressions: true,//数字转换
         selfDefending: true,
         transformObjectKeys: true,
