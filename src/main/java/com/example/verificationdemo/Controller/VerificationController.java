@@ -24,10 +24,11 @@ public class VerificationController {
     private VerificationService verificationService;
 
     @RequestMapping("/captcha")
-    public String captcha(HttpServletRequest request, HttpServletResponse response) throws IOException, ScriptException, NoSuchMethodException, InterruptedException {
+    public String captcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         String sessionId = UUID.randomUUID().toString();
         session.setAttribute("userSession", sessionId);
+
         return verificationService.getResources(sessionId);
     }
 

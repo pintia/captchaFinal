@@ -65,7 +65,7 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    public String getResources(String sessionId) throws IOException, ScriptException, NoSuchMethodException, InterruptedException {
+    public String getResources(String sessionId) throws IOException {
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
         File question = getRandomFile(path + "static/image/Question");
         File answer1 = getRandomFile(path + "static/image/Answer");
@@ -89,8 +89,8 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     public boolean checkLocation(CheckLocationRequest request, String sessionId) {
-        int index = request.getAnswerIndex();
         AnswerSessionMap answerSessionMap = globalCache.get(sessionId);
+        int index = request.getAnswerIndex();
         double answer = index == 1 ? answerSessionMap.getAnswer2() : answerSessionMap.getAnswer1();
         double userAnswer = answerLocationReCalculate(request.getMoveX(), answerSessionMap.getScale());
 

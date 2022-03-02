@@ -151,6 +151,9 @@ function checkLocation(move, selector){
                     resetAll();
                 }, 500);
             }
+        }else if(Http.readyState === XMLHttpRequest.DONE && Http.status === 500) {
+            alert("The session is outdated. Please try reload!");
+            return;
         }
     }
 

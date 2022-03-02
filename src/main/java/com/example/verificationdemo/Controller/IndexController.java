@@ -13,8 +13,8 @@ public class IndexController {
         return "index";
     }
 
-//    @RequestMapping("/static/**")
-//    public String staticForbid(){
-//        return "error";
-//    }
+    @RequestMapping("/static/js/**")
+    public String staticJsForbid(){
+        return "error";
+    }
 }
