@@ -69,29 +69,26 @@ public class VerificationServiceImpl implements VerificationService {
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
         File question = getRandomFile(path + "static/image/Question");
         File answer1 = getRandomFile(path + "static/image/Answer");
-        File answer2 = getRandomFile(path + "static/image/Answer");
 
         String questionString = getFileName(question);
         int answerInteger = getQuestionAnswer(questionString);
 
         double answer1Location = getAnswerLocation(answer1, answerInteger/10);
-        double answer2Location = getAnswerLocation(answer2, answerInteger%10);
         JsFileResource jsFileResource = FileTemplate.jsFileResource;
         double scaleX = jsFileResource.getScale();
-        AnswerSessionMap answerSessionMap = new AnswerSessionMap(answer1Location, answer2Location, scaleX);
+        AnswerSessionMap answerSessionMap = new AnswerSessionMap(answer1Location, scaleX);
 
         globalCache.set(sessionId, answerSessionMap, 300);
         String JsCode = jsFileResource.getJsCode();
 
-        String htmlFile = FileTemplate.getHtmlCode(getBase64File(question), getBase64File(answer1), getBase64File(answer2), JsCode);
+        String htmlFile = FileTemplate.getHtmlCode(getBase64File(question), getBase64File(answer1), JsCode);
         return htmlFile;
     }
 
     @Override
     public boolean checkLocation(CheckLocationRequest request, String sessionId) {
         AnswerSessionMap answerSessionMap = globalCache.get(sessionId);
-        int index = request.getAnswerIndex();
-        double answer = index == 1 ? answerSessionMap.getAnswer2() : answerSessionMap.getAnswer1();
+        double answer = answerSessionMap.getAnswer();
         double userAnswer = answerLocationReCalculate(request.getMoveX(), answerSessionMap.getScale());
 
         return Math.abs(userAnswer - answer) < 10;

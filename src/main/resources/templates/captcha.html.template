@@ -93,8 +93,8 @@
             color: #45494c;
             border-radius: 2px;
             width: 280px;
-            height: 20px;
-            margin-top: 5px;
+            height: 30px;
+            margin-top: 10px;
         }
 
         .sliderbg {
@@ -103,7 +103,7 @@
             right: 0;
             top: 0;
             background-color: #f7f9fa;
-            height: 20px;
+            height: 30px;
             border-radius: 2px;
             border: 1px solid #e6e8eb
         }
@@ -157,7 +157,7 @@
             position: absolute;
             left: 0;
             top: 0;
-            height: 20px;
+            height: 30px;
             width: 0px;
             border: 0 solid #1991fa;
             background: #d1e9fe;
@@ -168,8 +168,8 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             background: #fff;
             box-shadow: 0 0 3px rgba(0,0,0,.3);
             cursor: pointer;
@@ -228,7 +228,7 @@
             position: absolute;
         }
 
-        .answerOneDiv{
+        .answerDiv{
             width: 40px;
             height: 40px;
             overflow: hidden;
@@ -236,20 +236,12 @@
             top:60px;
             right:40px;
         }
-        .answerTwoDiv{
-            width: 40px;
-            height: 40px;
-            overflow: hidden;
-            position: absolute;
-            top:60px;
-            right:0px;
-        }
 
         .answerImg{
             height: 40px;
-            position: relative;
+            position: absolute;
+            top:0;
             left: 0;
-            /*opacity: 1;*/
         }
     </style>
 </head>
@@ -268,27 +260,14 @@
                         <img class="questionImg" src="data:image/jpg;base64,%s"/>
                         <img class="questionImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"/>
                     </div>
-                    <div class="answerOneDiv">
-                        <img class="answerImg one" src="data:image/jpg;base64,%s"/>
-                        <img class="questionImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"/>
+                    <div class="answerDiv">
+                        <img class="answerImg" src="data:image/jpg;base64,%s"/>
+                        <img class="answerImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"/>
                     </div>
-                    <div class="answerTwoDiv">
-                        <img class="answerImg two" src="data:image/jpg;base64,%s"/>
-                        <img class="questionImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"/>
-                    </div>
-                    <div class="sliderContainer one">
-                        <div class="sliderBg one"></div>
-                        <div class="sliderMask one">
-                            <div class="slider one">
-                                <i class="sliderIcon fa fa-arrow-right"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sliderContainer two">
-                        <div class="sliderBg two"></div>
-                        <div class="sliderMask two">
-                            <div class="slider two">
+                    <div class="sliderContainer">
+                        <div class="sliderBg"></div>
+                        <div class="sliderMask">
+                            <div class="slider">
                                 <i class="sliderIcon fa fa-arrow-right"></i>
                             </div>
                         </div>

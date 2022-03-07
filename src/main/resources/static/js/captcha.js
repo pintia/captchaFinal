@@ -1,11 +1,7 @@
 onPageReady();
 
 function onPageReady(){
-    var $btn = document.querySelector('.btn');
     var $modal = document.querySelector('.slider-captcha');
-    $btn.onmousedown = function(){
-        $modal.setAttribute("style", "display: block");
-    };
 
     ['.captcha-mask'].forEach(function(selector){
         var $el = $modal.querySelector(selector);
@@ -13,20 +9,16 @@ function onPageReady(){
 
     });
 
-    var $sliderOne = document.querySelector('.slider.one');
-    var $sliderTwo = document.querySelector('.slider.two');
+    var $slider = document.querySelector('.slider');
 
 
-    $sliderOne.addEventListener("mousedown", function(event){
-        sliderListener(event, ".one");
+    $slider.addEventListener("mousedown", function(event){
+        sliderListener(event);
     })
-    $sliderTwo.addEventListener("mousedown", function(event){
-        sliderListener(event, ".two");
-    })
-
 
     function hideModal(){
-        $modal.setAttribute("style", "display: none");
+        var href = location.host;
+        window.location.href= href;
     }
 
 };
@@ -40,20 +32,21 @@ function calculateImageMoveX(moveX, scaleX, imageWidth, maxMove){
 }
 
 
-function sliderListener(event, selector){
+function sliderListener(event){
     var moveEnable = true;
     var mousedownFlag = false;
     var sliderInitOffset = 0;
-    var MIN_MOVE = 0;
-    var MAX_MOVE = 260;
     var scaleX = 1;
     var moveX = 0;
 
-    var $slider = document.querySelector('.slider'+selector);
-    var $sliderMask = document.querySelector('.sliderMask'+selector);
-    var $sliderContainer = document.querySelector('.sliderContainer'+selector);
-    var $answer = document.querySelector('.answerImg'+selector);
-    var imageWidth = $answer.offsetWidth * 0.6;
+    var $slider = document.querySelector('.slider');
+    var $sliderMask = document.querySelector('.sliderMask');
+    var $sliderContainer = document.querySelector('.sliderContainer');
+    var $answer = document.querySelector('.answerImg');
+    var imageWidth = $answer.offsetWidth * 0.9;
+    var MIN_MOVE = 0;
+    var MAX_MOVE = $sliderContainer.offsetWidth - $slider.offsetWidth;
+    console.log(MAX_MOVE);
 
     $sliderContainer.classList.add("sliderContainer_active");
     sliderInitOffset = event.clientX;
@@ -83,7 +76,7 @@ function sliderListener(event, selector){
         var imgMoveX = moveX * imageWidth / MAX_MOVE;
         sliderInitOffset = 0;
         mousedownFlag=false;
-        checkLocation(imgMoveX, selector);
+        checkLocation(imgMoveX);
         document.onmousemove = null;
         document.onmouseup = null;
 
@@ -91,31 +84,17 @@ function sliderListener(event, selector){
 
 }
 
-function checkAllSuccess(){
-    return checkSuccess(".one") && checkSuccess(".two");
-}
-
-function checkSuccess(selector){
-    var $sliderContainer = document.querySelector('.sliderContainer'+selector);
-    return $sliderContainer.classList.contains("sliderContainer_success");
-}
-
 function success(){
     console.log("success");
     alert("success");
-    resetAll();
+    reset();
 }
 
-function resetAll(){
-    reset(".one");
-    reset(".two");
-}
-
-function reset(selector){
-    var $slider = document.querySelector('.slider'+selector);
-    var $sliderMask = document.querySelector('.sliderMask'+selector);
-    var $sliderContainer = document.querySelector('.sliderContainer'+selector);
-    var $answer = document.querySelector('.answerImg'+selector);
+function reset(){
+    var $slider = document.querySelector('.slider');
+    var $sliderMask = document.querySelector('.sliderMask');
+    var $sliderContainer = document.querySelector('.sliderContainer');
+    var $answer = document.querySelector('.answerImg');
 
     $sliderContainer.classList.remove("sliderContainer_success");
     $sliderContainer.classList.remove("sliderContainer_fail");
@@ -125,15 +104,14 @@ function reset(selector){
     $answer.setAttribute("style","left:0px");
 }
 
-function checkLocation(move, selector){
-    var $sliderContainer = document.querySelector('.sliderContainer'+selector);
+function checkLocation(move){
+    var $sliderContainer = document.querySelector('.sliderContainer');
 
     const Http = new XMLHttpRequest();
     const url='http://localhost:8080/checkLocation';
     Http.open("POST", url);
     Http.send(JSON.stringify({
         moveX: move,
-        answerIndex: selector === ".one" ? 10 : 1,
     }));
 
     Http.onreadystatechange = function (){
@@ -145,17 +123,20 @@ function checkLocation(move, selector){
                 $sliderContainer.removeEventListener("mousedown", function(event){
                     sliderListener(event, selector);
                 });
-                if(checkAllSuccess()){
-                    setTimeout(function (){
-                        success();
-                    }, 500);
-                }
+
+                setTimeout(function (){
+                    success();
+                }, 500);
+
             }else{
                 $sliderContainer.classList.add("sliderContainer_fail");
                 setTimeout(function (){
-                    resetAll();
+                    reset();
                 }, 500);
             }
+        }else if(Http.readyState === XMLHttpRequest.DONE && Http.status === 500) {
+            alert("The session is outdated. Please try reload!");
+            return;
         }
     }
 

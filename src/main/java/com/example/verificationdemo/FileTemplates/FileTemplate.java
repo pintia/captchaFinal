@@ -73,15 +73,15 @@ public class FileTemplate {
         return jsFileTemplate;
     }
 
-    public static String getJsCode(String url, double scaleX) throws IOException, InterruptedException {
+    private static String getJsCode(String url, double scaleX) throws IOException, InterruptedException {
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
         return obfuscator(path + "templates/captcha.js.template", url, scaleX);
     }
 
-    public static String getHtmlCode(String questionImg, String answer1Img, String answer2Img, String JsCode) throws IOException {
+    public static String getHtmlCode(String questionImg, String answer1Img, String JsCode) throws IOException {
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
         String htmlFileTemplate = readToString(path + "templates/captcha.html.template");
-        String htmlFileSource = String.format(htmlFileTemplate, questionImg, answer1Img, answer2Img, JsCode);
+        String htmlFileSource = String.format(htmlFileTemplate, questionImg, answer1Img, JsCode);
         return htmlFileSource;
     }
 }
