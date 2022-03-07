@@ -9,6 +9,9 @@ function onPageReady(){
 
     });
 
+    var $question = document.querySelector('.questionDiv');
+    $question.onclick = reset;
+
     var $slider = document.querySelector('.slider');
 
 
@@ -16,12 +19,11 @@ function onPageReady(){
         sliderListener(event);
     })
 
-    function hideModal(){
-        var href = location.host;
-        window.location.href= href;
-    }
-
 };
+
+function hideModal(){
+    window.location.href = location.href.replace(location.pathname, "");
+}
 
 function calculateImageMoveX(moveX, scaleX, imageWidth, maxMove){
     if (moveX / maxMove <= 1 / (1 + scaleX)){
