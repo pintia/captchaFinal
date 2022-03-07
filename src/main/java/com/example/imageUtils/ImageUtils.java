@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.util.Random;
 
 public class ImageUtils {
-    static Color backColor = new Color(255,255,255);
-    static Color lineColor = new Color(0, 0, 0);
-    static Color foreColor = null;
 
     public static Color getRandomColor(){
         Random r = new Random();
@@ -59,12 +56,13 @@ public class ImageUtils {
         }
 
     }
-    public static BufferedImage getCaptchaImage(int width, int height, int interLine, String textCode, boolean randomLocation, double heightPercent, int rightWhite, boolean isShear){
+    public static BufferedImage getCaptchaImage(int width, int height, int interLine, String textCode, boolean randomLocation, int fsize, int rightWhite, boolean isShear, Color backColor, Color lineColor, Color foreColor){
         BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
         Graphics g = image.getGraphics();
         //随机操作对象
         Random r=new Random();
 
+        //背景颜色
         g.setColor(backColor==null?getRandomColor():backColor);
         g.fillRect(0,0,width,height);
 
@@ -79,16 +77,15 @@ public class ImageUtils {
             }
         }
 
-        int fsize=(int)(height*heightPercent);
-        int fx=0;
-        int fy=fsize;
+        int fx=10;
+        int fy=height;
         g.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,fsize));
         //写字符
         for(int i=0;i<textCode.length();i++){
-            fy=randomLocation?(int)((Math.random()*0.3+0.6)*height):fy;//每个字符高低是否随机
+            fy=randomLocation?(int)((Math.random()*0.3+0.5)*height):fy;//每个字符高低是否随机
             g.setColor(foreColor==null?getRandomColor():foreColor);
-            g.drawString(textCode.charAt(i)+"",fx,fy);
-            fx+=(width - rightWhite) / (textCode.length()) * (randomLocation ? (Math.random() * 0.2 + 0.9) : 1); //依据宽度浮动
+            g.drawString(textCode.charAt(i)+"",(randomLocation ? (int)(fx + (width - rightWhite) / (textCode.length()) * (Math.random() * 0.2 - 0.1)): fx),fy);
+            fx+=(width - rightWhite) / (textCode.length()); //依据宽度浮动
         }
 
         //扭曲图片
@@ -98,7 +95,7 @@ public class ImageUtils {
         }
 
 
-        float yawpRate = 0.05f;// 噪声率
+        float yawpRate = 0.1f;// 噪声率
         int area = (int) (yawpRate * width * height);//噪点数量
         for (int i = 0; i < area; i++) {
             int xxx = r.nextInt(width);
@@ -111,8 +108,8 @@ public class ImageUtils {
         return image;
     }
 
-    public static boolean create(int width, int height, int interLine, String textCode, boolean randomLocation, String path, double heightPercent, int rightWhite, boolean isShear){
-        BufferedImage imageFromCode = getCaptchaImage(width, height, interLine, textCode, randomLocation, heightPercent, rightWhite, isShear);
+    public static boolean create(int width, int height, int interLine, String textCode, boolean randomLocation, String path, int fsize, int rightWhite, boolean isShear, Color backColor, Color lineColor, Color foreColor){
+        BufferedImage imageFromCode = getCaptchaImage(width, height, interLine, textCode, randomLocation, fsize, rightWhite, isShear, backColor, lineColor, foreColor);
         try {
 
             File file = new File(path + textCode.replace(" ","") + ".jpg");

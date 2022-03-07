@@ -2,11 +2,15 @@ package com.example.imageUtils;
 
 import org.springframework.util.ClassUtils;
 
+import java.awt.*;
 import java.util.Random;
 
 public class AnswerCreateUtil {
     private static Random rand = new Random();
     public static int answerWidth = 400;
+    static Color foreColor = new Color(255,255,255);
+    static Color lineColor = null;
+    static Color backColor = new Color(30, 60, 110);
 
     public static void swap(int[] a, int i, int j){
         int temp = a[i];
@@ -47,8 +51,9 @@ public class AnswerCreateUtil {
         boolean createFlag = true;
         int count = 0;
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        int fsize = 52;
         while (createFlag && count < 10){
-            createFlag = ImageUtils.create(answerWidth, 40, 10, getRandomCodeStaticLength(), false, path + "static/image/Answer/", 1, 0, false);
+            createFlag = ImageUtils.create(answerWidth, 40, 5, getRandomCodeStaticLength(), false, path + "static/image/Answer/", fsize, 0, false, backColor, lineColor, foreColor);
             count++;
         }
         System.out.println(count);
