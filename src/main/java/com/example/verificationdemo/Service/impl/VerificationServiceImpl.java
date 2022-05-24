@@ -1,24 +1,16 @@
 package com.example.verificationdemo.Service.impl;
 
-import com.example.imageUtils.AnswerCreateUtil;
-import com.example.verificationdemo.FileTemplates.FileTemplate;
 import com.example.verificationdemo.Service.VerificationService;
 import com.example.verificationdemo.type.AnswerSessionMap;
 import com.example.verificationdemo.type.CheckLocationRequest;
-import com.example.verificationdemo.type.JsFileResource;
 import com.example.verificationdemo.utils.IGlobalCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
-import sun.misc.BASE64Encoder;
-
-import javax.script.*;
 import java.io.*;
 
 @Service("VerificationService")
 public class VerificationServiceImpl implements VerificationService {
-    //TODO: session存不同上报请求的答案数据，五分钟失效
-    double imgWidth = AnswerCreateUtil.answerWidth * 0.9;
 
     @Autowired
     private IGlobalCache<String, AnswerSessionMap> globalCache;
@@ -32,26 +24,17 @@ public class VerificationServiceImpl implements VerificationService {
         return randomFile;
     }
 
-    private String getBase64File(File file) throws IOException {
-        InputStream randomFileIS = new FileInputStream(file);
-        byte[] data = new byte[randomFileIS.available()];
-        randomFileIS.read(data);
-        randomFileIS.close();
-        return new BASE64Encoder().encode(data);
-    }
-
     private double getAnswerLocation(File img, int answer){
         String fileName = getFileName(img);
-        double location = imgWidth * fileName.indexOf(String.valueOf(answer)) / (fileName.length() - 1);
+        double location = fileName.indexOf(String.valueOf(answer))  * 1.0 / (fileName.length() - 1);
         return location;
     }
 
-    private double answerLocationReCalculate(double answer, double scaleX){
-        if (answer / imgWidth <= 1 / (1 + scaleX)){
-            return answer * scaleX;
-        }else {
-            return imgWidth * scaleX / (1 + scaleX) + (answer - imgWidth / (1 + scaleX)) / scaleX;
-        }
+    private double getAnswerLocation(File question, File answer){
+        String questionString = getFileName(question);
+        int answerInteger = getQuestionAnswer(questionString);
+
+        return getAnswerLocation(answer, answerInteger/10);
     }
 
     private String getFileName(File file){
@@ -65,32 +48,72 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    public String getResources(String sessionId) throws IOException {
-        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-        File question = getRandomFile(path + "static/image/Question");
-        File answer1 = getRandomFile(path + "static/image/Answer");
-
-        String questionString = getFileName(question);
-        int answerInteger = getQuestionAnswer(questionString);
-
-        double answer1Location = getAnswerLocation(answer1, answerInteger/10);
-        JsFileResource jsFileResource = FileTemplate.jsFileResource;
-        double scaleX = jsFileResource.getScale();
-        AnswerSessionMap answerSessionMap = new AnswerSessionMap(answer1Location, scaleX);
-
-        globalCache.set(sessionId, answerSessionMap, 300);
-        String JsCode = jsFileResource.getJsCode();
-
-        String htmlFile = FileTemplate.getHtmlCode(getBase64File(question), getBase64File(answer1), JsCode);
-        return htmlFile;
-    }
-
-    @Override
     public boolean checkLocation(CheckLocationRequest request, String sessionId) {
         AnswerSessionMap answerSessionMap = globalCache.get(sessionId);
         double answer = answerSessionMap.getAnswer();
-        double userAnswer = answerLocationReCalculate(request.getMoveX(), answerSessionMap.getScale());
+        double userAnswer = request.getMoveX();
 
-        return Math.abs(userAnswer - answer) < 10;
+        return Math.abs(userAnswer - answer) < 0.03;
+    }
+
+    @Override
+    public boolean requestImg(String sessionId) {
+        try{
+            String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+            File question = getRandomFile(path + "static/image/Question");
+            File answer = getRandomFile(path + "static/image/Answer");
+
+            String questionPath = question.getName();
+            String answerPath = answer.getName();
+
+            double answerLocation = getAnswerLocation(question, answer);
+
+            AnswerSessionMap answerSessionMap = new AnswerSessionMap(answerLocation, questionPath, answerPath);
+
+            globalCache.set(sessionId, answerSessionMap, 300);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    private byte[] getImgContent(String path) throws IOException {
+        File file = new File(path);
+        FileInputStream inputStream = new FileInputStream(file);
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes, 0, inputStream.available());
+        return bytes;
+    }
+
+    @Override
+    public byte[] requestQuestionImg(String sessionId) throws IOException {
+        AnswerSessionMap answerSessionMap = globalCache.get(sessionId);
+        String fileName = answerSessionMap.getQuestionPath();
+        answerSessionMap.setQuestionPath(null);
+        globalCache.set(sessionId, answerSessionMap);
+
+        if (fileName != null){
+            String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+            return getImgContent(path + "static/image/Question/" + fileName);
+        }else{
+            return new byte[0];
+        }
+
+    }
+
+    @Override
+    public byte[] requestAnswerImg(String sessionId) throws IOException {
+        AnswerSessionMap answerSessionMap = globalCache.get(sessionId);
+        String fileName = answerSessionMap.getAnswerPath();
+        answerSessionMap.setAnswerPath(null);
+        globalCache.set(sessionId, answerSessionMap);
+
+        if (fileName != null){
+            String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+            return getImgContent(path + "static/image/Answer/" + fileName);
+        }else{
+            return new byte[0];
+        }
+
     }
 }

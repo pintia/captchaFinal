@@ -1,6 +1,10 @@
-onPageReady();
+$(document).ready(function(){
+    onPageReady();
+})
 
 function onPageReady(){
+    getImageSource();
+
     var $modal = document.querySelector('.slider-captcha');
 
     ['.captcha-mask'].forEach(function(selector){
@@ -9,6 +13,9 @@ function onPageReady(){
 
     });
 
+    var $question = document.querySelector('.questionDiv');
+    $question.onclick = reset;
+
     var $slider = document.querySelector('.slider');
 
 
@@ -16,19 +23,40 @@ function onPageReady(){
         sliderListener(event);
     })
 
-    function hideModal(){
-        var href = location.host;
-        window.location.href= href;
-    }
-
 };
+function getImageSource(){
+    var $questionImg = document.querySelector('.questionImg');
+    var $answerImg = document.querySelector('.answerImg');
 
-function calculateImageMoveX(moveX, scaleX, imageWidth, maxMove){
-    if (moveX / maxMove <= 1 / (1 + scaleX)){
-        return moveX * imageWidth / maxMove * scaleX;
-    }else {
-        return imageWidth * scaleX / (1 + scaleX) + (moveX - maxMove / (1 + scaleX)) * imageWidth / maxMove / scaleX;
+    const Http = new XMLHttpRequest();
+    const url='/requestImg';
+    Http.open("GET", url);
+    Http.send();
+    Http.onreadystatechange = function (){
+        if(Http.readyState === XMLHttpRequest.DONE && Http.status === 200) {
+            var result = JSON.parse(Http.response);
+
+            if(result){
+                var timeStamp = Date.parse(new Date());
+                $questionImg.setAttribute("src", "/questionImg?timestamp="+timeStamp);
+                $answerImg.setAttribute("src", "/answerImg?timestamp="+timeStamp);
+            }else{
+                alert("网络异常，请稍后重试！");
+                return;
+            }
+        }else if(Http.readyState === XMLHttpRequest.DONE && Http.status === 500) {
+            alert("服务器异常，请稍后重试！");
+            return;
+        }
     }
+}
+
+function hideModal(){
+    window.location.href = location.href.replace(location.pathname, "");
+}
+
+function calculateImageMoveX(moveX, imageWidth, maxMove){
+    return moveX * imageWidth / maxMove;
 }
 
 
@@ -36,7 +64,6 @@ function sliderListener(event){
     var moveEnable = true;
     var mousedownFlag = false;
     var sliderInitOffset = 0;
-    var scaleX = 1;
     var moveX = 0;
 
     var $slider = document.querySelector('.slider');
@@ -46,7 +73,6 @@ function sliderListener(event){
     var imageWidth = $answer.offsetWidth * 0.9;
     var MIN_MOVE = 0;
     var MAX_MOVE = $sliderContainer.offsetWidth - $slider.offsetWidth;
-    console.log(MAX_MOVE);
 
     $sliderContainer.classList.add("sliderContainer_active");
     sliderInitOffset = event.clientX;
@@ -65,7 +91,7 @@ function sliderListener(event){
         moveX>MAX_MOVE?moveX=MAX_MOVE:moveX=moveX;
 
 
-        var imageMoveX = calculateImageMoveX(moveX, scaleX, imageWidth, MAX_MOVE);
+        var imageMoveX = calculateImageMoveX(moveX, imageWidth, MAX_MOVE);
 
         $slider.setAttribute("style","left:" + moveX + "px");
         $sliderMask.setAttribute("style","width:" + moveX + "px");
@@ -73,7 +99,7 @@ function sliderListener(event){
     }
 
     document.onmouseup = function(event){
-        var imgMoveX = moveX * imageWidth / MAX_MOVE;
+        var imgMoveX = moveX / MAX_MOVE;
         sliderInitOffset = 0;
         mousedownFlag=false;
         checkLocation(imgMoveX);
@@ -85,12 +111,11 @@ function sliderListener(event){
 }
 
 function success(){
-    console.log("success");
     alert("success");
     reset();
 }
 
-function reset(){
+function resetLocation(){
     var $slider = document.querySelector('.slider');
     var $sliderMask = document.querySelector('.sliderMask');
     var $sliderContainer = document.querySelector('.sliderContainer');
@@ -104,11 +129,16 @@ function reset(){
     $answer.setAttribute("style","left:0px");
 }
 
+function reset(){
+    resetLocation();
+    getImageSource();
+}
+
 function checkLocation(move){
     var $sliderContainer = document.querySelector('.sliderContainer');
 
     const Http = new XMLHttpRequest();
-    const url='http://localhost:8080/checkLocation';
+    const url='/checkLocation';
     Http.open("POST", url);
     Http.send(JSON.stringify({
         moveX: move,
@@ -116,7 +146,7 @@ function checkLocation(move){
 
     Http.onreadystatechange = function (){
         if(Http.readyState === XMLHttpRequest.DONE && Http.status === 200) {
-            checkResult = JSON.parse(Http.response);
+            var checkResult = JSON.parse(Http.response);
 
             if(checkResult){
                 $sliderContainer.classList.add("sliderContainer_success");
@@ -135,7 +165,7 @@ function checkLocation(move){
                 }, 500);
             }
         }else if(Http.readyState === XMLHttpRequest.DONE && Http.status === 500) {
-            alert("The session is outdated. Please try reload!");
+            alert("会话已过期，请刷新重试！");
             return;
         }
     }

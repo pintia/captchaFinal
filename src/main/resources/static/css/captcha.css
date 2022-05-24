@@ -215,7 +215,7 @@ body {
     position: absolute;
 }
 
-.answerOneDiv{
+.answerDiv{
     width: 40px;
     height: 40px;
     overflow: hidden;
@@ -223,18 +223,10 @@ body {
     top:60px;
     right:40px;
 }
-.answerTwoDiv{
-    width: 40px;
-    height: 40px;
-    overflow: hidden;
-    position: absolute;
-    top:60px;
-    right:0px;
-}
 
 .answerImg{
     height: 40px;
-    position: relative;
+    position: absolute;
+    top:0;
     left: 0;
-    /*opacity: 1;*/
 }

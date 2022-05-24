@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CheckLocationRequest {
     @JsonProperty
-    private int moveX;
+    private double moveX;
 
-    public int getMoveX(){
+    public double getMoveX(){
         return this.moveX;
     }
 }
