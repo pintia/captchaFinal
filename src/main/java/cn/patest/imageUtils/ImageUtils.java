@@ -1,4 +1,4 @@
-package com.example.imageUtils;
+package cn.patest.imageUtils;
 
 import org.springframework.util.ResourceUtils;
 

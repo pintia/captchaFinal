@@ -1,4 +1,4 @@
-package com.example.verificationdemo.type;
+package cn.patest.captchafinal.type;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

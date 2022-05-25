@@ -1,4 +1,4 @@
-package com.example.verificationdemo.Interceptor;
+package cn.patest.captchafinal.Interceptor;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

@@ -1,6 +1,6 @@
-package com.example.verificationdemo.Service;
+package cn.patest.captchafinal.Service;
 
-import com.example.verificationdemo.type.CheckLocationRequest;
+import cn.patest.captchafinal.type.CheckLocationRequest;
 
 import java.io.IOException;
 

@@ -1,7 +1,7 @@
-package com.example.verificationdemo.Controller;
+package cn.patest.captchafinal.Controller;
 
-import com.example.verificationdemo.Service.VerificationService;
-import com.example.verificationdemo.type.CheckLocationRequest;
+import cn.patest.captchafinal.Service.VerificationService;
+import cn.patest.captchafinal.type.CheckLocationRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
