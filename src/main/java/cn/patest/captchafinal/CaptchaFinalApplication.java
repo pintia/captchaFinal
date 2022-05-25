@@ -5,7 +5,7 @@ import cn.patest.imageUtils.QuestionCreateUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"cn.patest.verificationdemo"})
+@SpringBootApplication(scanBasePackages = {"cn.patest.captchafinal"})
 public class CaptchaFinalApplication {
 
     public static void main(String[] args) {
