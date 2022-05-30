@@ -1,8 +1,7 @@
-package com.example.verificationdemo.utils;
+package cn.patest.captchafinal.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 

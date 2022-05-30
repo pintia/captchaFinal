@@ -1,4 +1,4 @@
-package com.example.verificationdemo.Interceptor;
+package cn.patest.captchafinal.Interceptor;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,6 +14,8 @@ public class SessionInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         Object userSession = session.getAttribute("userSession");
         if (userSession != null){
+            String cookies = request.getHeader("Set-Cookie");
+            response.setHeader("Set-Cookie", cookies + "; SameSite=None; Secure");
             return true;
         }
         response.sendRedirect("error.html");

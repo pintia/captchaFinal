@@ -1,9 +1,9 @@
-package com.example.verificationdemo.Service.impl;
+package cn.patest.captchafinal.Service.impl;
 
-import com.example.verificationdemo.Service.VerificationService;
-import com.example.verificationdemo.type.AnswerSessionMap;
-import com.example.verificationdemo.type.CheckLocationRequest;
-import com.example.verificationdemo.utils.IGlobalCache;
+import cn.patest.captchafinal.Service.VerificationService;
+import cn.patest.captchafinal.type.AnswerSessionMap;
+import cn.patest.captchafinal.type.CheckLocationRequest;
+import cn.patest.captchafinal.utils.IGlobalCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;

@@ -1,4 +1,4 @@
-package com.example.imageUtils;
+package cn.patest.imageUtils;
 
 import org.springframework.util.ClassUtils;
 
@@ -56,6 +56,6 @@ public class AnswerCreateUtil {
             createFlag = ImageUtils.create(answerWidth, 40, 5, getRandomCodeStaticLength(), false, path + "static/image/Answer/", fsize, 0, false, backColor, lineColor, foreColor);
             count++;
         }
-        System.out.println(count);
+        //System.out.println(count);
     }
 }

@@ -8,15 +8,21 @@
         <version>2.6.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>VerificationDemo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>VerificationDemo</name>
-    <description>VerificationDemo</description>
+    <groupId>cn.patest</groupId>
+    <artifactId>captcha-final</artifactId>
+    <version>0.0.1</version>
+    <name>CaptchaFinal</name>
+    <description>CaptchaFinal</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>5.2</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

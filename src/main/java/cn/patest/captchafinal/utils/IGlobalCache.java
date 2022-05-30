@@ -1,4 +1,4 @@
-package com.example.verificationdemo.utils;
+package cn.patest.captchafinal.utils;
 
 import org.springframework.data.redis.core.RedisTemplate;
 
