@@ -29,6 +29,7 @@ public class IndexController {
 
     @CrossOrigin
     @RequestMapping("/captcha")
+    @ResponseBody
     public String captcha(){
         return UUID.randomUUID().toString();
     }
