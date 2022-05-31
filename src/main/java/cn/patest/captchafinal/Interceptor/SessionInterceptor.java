@@ -14,8 +14,6 @@ public class SessionInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         Object userSession = session.getAttribute("userSession");
         if (userSession != null){
-            String cookies = request.getHeader("Set-Cookie");
-            response.setHeader("Set-Cookie", cookies + "; SameSite=None; Secure");
             return true;
         }
         response.sendRedirect("error.html");
